@@ -1,0 +1,45 @@
+<!doctype html>
+<html ng-app="DoraemonRecorder" ng-csp>
+  <head>
+    <meta charset="utf-8">
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css styles/main.css -->
+    <link href="styles/main.css" rel="stylesheet">
+    <!-- endbuild -->
+    
+  </head>
+  <body>
+    <div ng-controller="PanelController" style="width: 350px">
+        <div class="steps">
+            <h6>Steps Recorded:</h6>
+            <ul id="recorded-steps" class="flow">
+                <li ng-repeat="step in recordedSteps track by $index">{{step}}</li>
+            </ul>
+        </div>
+
+        <div class="toolbar">
+            <button type="button" class="btn btn-sm btn-danger" ng-click="recordUISteps()">{{recordButtonText}}</button>
+            <button type="button" class="btn btn-sm btn-default" ng-disabled="!recording" ng-click="takeSnapshot()">Take Snapshot</button>
+            <button type="button" class="btn btn-sm btn-primary" ng-disabled="!recording" ng-click="saveSteps()">Save Steps</button>
+        </div>
+    </div>
+
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js scripts/popup.js -->
+    <script src="app.js"></script>
+    <script src="scripts/popup.js"></script>
+    <!-- endbuild -->
+  </body>
+</html>
