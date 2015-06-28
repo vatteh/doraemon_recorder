@@ -26,6 +26,7 @@ function handler(event, node){
   }
   
   chrome.runtime.sendMessage({action:'recordTestStepContent', value: message});
+  console.log(message);
 };
 
 /**

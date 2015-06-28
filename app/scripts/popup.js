@@ -4,7 +4,7 @@ app.factory('HttpFactory', function ($http) {
 
     return {
         sendSteps: function (steps) {
-            return $http.post('http://localhost:1337/api/test-config', steps).then(function (response) {
+            return $http.post('http://localhost:1337/api/test-steps', steps).then(function (response) {
                 return response.data;
             });
         }
@@ -24,8 +24,6 @@ app.controller('PanelController', function ($scope, HttpFactory) {
 	  	if (request.action === 'addTestStep') {
 	  		$scope.recordedSteps.push(parseStep(request.value));
 	  	}
-
-
 
 	  	$scope.$digest();
 	});
@@ -47,7 +45,7 @@ app.controller('PanelController', function ($scope, HttpFactory) {
 
 	$scope.saveSteps = function() {
 		chrome.runtime.sendMessage({action: "popupInfoRequest"}, function(currentData) {
-			HttpFactory.sendSteps(currentData.recordedSteps).then(function(data) {
+			HttpFactory.sendSteps(currentData.recordedSteps).then( function(data) {
 				chrome.runtime.sendMessage({action: "cancelRecording"}, updatePopup);
 				alert('Yeah! Data sent and response loaded.');
 			}, function (err) {
