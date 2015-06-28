@@ -30,7 +30,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       recordingID = tabs[0].id;
 			chrome.tabs.reload(tabs[0].id, null);
 		  addTestStep(['URL', [tabs[0].url]]);
-			chrome.runtime.sendMessage({action:'addTestStep', value: ['URL', tabs[0].url]});
+			chrome.runtime.sendMessage({action:'addTestStep', value: ['URL', [tabs[0].url]]});
 		});
 	}
 
