@@ -22,6 +22,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		chrome.runtime.sendMessage({action:'addTestStep', value: request.value});
 	}
 
+  // Test Step object
+  // { 
+  //  event: 
+  //  path: optional
+  //  value: optional
+  // }
 	if (request.action === "startRecording") {
 		resetParams();
     recording = true;
@@ -29,8 +35,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		chrome.tabs.query({active: true, lastFocusedWindow: true}, function (tabs) {
       recordingID = tabs[0].id;
 			chrome.tabs.reload(tabs[0].id, null);
-		  addTestStep(['URL', [tabs[0].url]]);
-			chrome.runtime.sendMessage({action:'addTestStep', value: ['URL', [tabs[0].url]]});
+      var testStep = { event: 'URL', value: tabs[0].url };
+		  addTestStep(testStep);
+			chrome.runtime.sendMessage({action:'addTestStep', value: testStep});
 		});
 	}
 

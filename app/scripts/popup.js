@@ -4,7 +4,7 @@ app.factory('HttpFactory', function ($http) {
 
     return {
         sendSteps: function (steps) {
-            return $http.post('http://localhost:1337/api/test-steps', steps).then(function (response) {
+            return $http.post('http://localhost:1337/api/test-case', steps).then(function (response) {
                 return response.data;
             });
         }
@@ -38,8 +38,8 @@ app.controller('PanelController', function ($scope, HttpFactory) {
 
 	$scope.takeSnapshot = function() {
 		var lastStep = $scope.recordedSteps[$scope.recordedSteps.length - 1];
-		if ($scope.recording && $scope.recordedSteps.length === 0 || $scope.recordedSteps[$scope.recordedSteps.length - 1] !== 'Take snapshot') {
-			chrome.runtime.sendMessage({action:'recordTestStepPopup', value: ['Take snapshot']});
+		if ($scope.recording && $scope.recordedSteps.length === 0 || $scope.recordedSteps[$scope.recordedSteps.length - 1] !== 'Take Snapshot') {
+			chrome.runtime.sendMessage({action:'recordTestStepPopup', value: { event: 'Take Snapshot'}});
 		}
 	};
 
@@ -73,16 +73,21 @@ app.controller('PanelController', function ($scope, HttpFactory) {
 		$scope.$digest();
 	};
 
+	// Test Step object
+	// { 
+	//	event: 
+	// 	path: optional
+	//	value: optional
+	// }
 	function parseStep(request) {
-		var eventType = request[0];
-		var text = eventType;
+		var text = request.event;
 
-		if (request[1]) { 
-			text += ' at ' + request[1].join(' > ');
+		if (request.path) { 
+			text += ' at ' + request.path.join(' > ');
 		}
 
-		if (request[2]) {
-			text += ' of value ' + request[2];
+		if (request.value) {
+			text += ' of value ' + request.value;
 		}
 
 		return text;

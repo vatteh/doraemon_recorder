@@ -20,9 +20,9 @@ function captureTextFieldInput() {
  */
 function handler(event, node){
   var path = cssPath(node);
-  var message = [event, path];
+  var message = {event: event, path: path};
   if (node.value) {
-  	message.push(node.value);
+  	message.value = node.value;
   }
   
   chrome.runtime.sendMessage({action:'recordTestStepContent', value: message});
