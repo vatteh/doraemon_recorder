@@ -10,7 +10,7 @@ function captureTextFieldInput() {
   for (var i = 0; i < elements.length; i++) {
 		elements[i].addEventListener('keydown', function(event) {
   		if (event.keyCode === 9 || event.keyCode === 13) 
-  			handler('Enter text', event.target);
+  			handler(4, 'Enter text', event.target);
 		});
   }
 };
@@ -18,9 +18,16 @@ function captureTextFieldInput() {
 /**
  * handler() passes the test step to the background.js
  */
-function handler(event, node){
+ // Test Step object
+ // { 
+ //  stepCode: 
+ //  eventText: 
+ //  path: (optional)
+ //  value: (optional)
+ // }
+function handler(stepCode, eventText, node){
   var path = cssPath(node);
-  var message = {event: event, path: path};
+  var message = {stepCode: stepCode, eventText: eventText, path: path};
   if (node.value) {
   	message.value = node.value;
   }
@@ -60,7 +67,7 @@ function cssPath(el) {
 }
 
 window.onclick = function(event) { 
-    handler('Click', event.target);
+    handler(3,'Click', event.target);
 };
 
 captureTextFieldInput();

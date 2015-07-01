@@ -15,11 +15,13 @@
   </head>
   <body>
     <div ng-controller="PanelController" style="width: 350px">
-        <div class="steps">
+        <div class="steps" style='margin-bottom: 15px; max-height: 250px; overflow: auto;'>
             <h6>Steps Recorded:</h6>
-            <ul id="recorded-steps" class="flow">
-                <li ng-repeat="step in recordedSteps track by $index">{{step}}</li>
-            </ul>
+            <div class="panel panel-default" ng-repeat="step in recordedSteps track by $index" style='box-shadow: none; margin: 3px;'>
+                <div class="panel-body" style='padding: 3px;'>
+                    #{{$index + 1}} - {{step}}
+                </div>
+            </div>
         </div>
 
         <div class="toolbar">

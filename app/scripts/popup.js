@@ -3,8 +3,8 @@
 app.factory('HttpFactory', function ($http) {
 
     return {
-        sendSteps: function (steps) {
-            return $http.post('http://localhost:1337/api/test-case', steps).then(function (response) {
+        sendSteps: function (testCaseData) {
+            return $http.post('http://localhost:1337/api/test-case/extension', testCaseData).then(function (response) {
                 return response.data;
             });
         }
@@ -39,20 +39,25 @@ app.controller('PanelController', function ($scope, HttpFactory) {
 	$scope.takeSnapshot = function() {
 		var lastStep = $scope.recordedSteps[$scope.recordedSteps.length - 1];
 		if ($scope.recording && $scope.recordedSteps.length === 0 || $scope.recordedSteps[$scope.recordedSteps.length - 1] !== 'Take Snapshot') {
-			chrome.runtime.sendMessage({action:'recordTestStepPopup', value: { event: 'Take Snapshot'}});
+			chrome.runtime.sendMessage({action:'recordTestStepPopup', value: {stepCode: 2, eventText: 'Take Snapshot'}});
 		}
 	};
 
 	$scope.saveSteps = function() {
 		chrome.runtime.sendMessage({action: "popupInfoRequest"}, function(currentData) {
-			HttpFactory.sendSteps(currentData.recordedSteps).then( function(data) {
+			HttpFactory.sendSteps({steps: currentData.recordedSteps, userID: currentData.userID}).then( function(newTestCase) {
 				chrome.runtime.sendMessage({action: "cancelRecording"}, updatePopup);
-				alert('Yeah! Data sent and response loaded.');
+				finishForm(newTestCase);
+				// display success in popup
 			}, function (err) {
-				alert('Oops! Something goes wrong.');
+				// display error in popup
 				console.log(err);
 			});
 		});
+	};
+
+	function finishForm(newTestCase) {
+		chrome.tabs.create({ url: 'http://localhost:1337/admin/test-case/' + newTestCase._id });
 	};
 
 	function updatePopup(currentData) {
@@ -75,12 +80,13 @@ app.controller('PanelController', function ($scope, HttpFactory) {
 
 	// Test Step object
 	// { 
-	//	event: 
-	// 	path: optional
-	//	value: optional
+	//  eventCode: 
+	//  eventText: 
+	//  path: (optional)
+	//  value: (optional)
 	// }
 	function parseStep(request) {
-		var text = request.event;
+		var text = request.eventText;
 
 		if (request.path) { 
 			text += ' at ' + request.path.join(' > ');
