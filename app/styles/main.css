@@ -1,3 +1,24 @@
 body {
   padding: 20px;
+  background-color: #FCFCFC;
+}
+
+.themeColorA {
+	background-color: #61af13;
+	color: #FCFCFC;
+	border-radius: 0px;
+}
+
+.sharpBorders {
+	border-radius: 0px;
+}
+
+.lessMargin {
+	margin: 0px;
+}
+
+.step {
+	box-shadow: none; 
+	margin: 3px; 
+	border-radius: 0px;
 }

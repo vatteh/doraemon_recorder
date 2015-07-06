@@ -35,7 +35,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if (request.action === "startRecording") {
 		resetParams();
     	recording = true;
-		sendResponse({recording: recording, recordedSteps: recordedSteps});
+		sendResponse({recording: recording, recordedSteps: recordedSteps, userID: userID, userEmail: userEmail});
 		chrome.tabs.query({active: true, lastFocusedWindow: true}, function (tabs) {
       		recordingID = tabs[0].id;
 			chrome.tabs.reload(tabs[0].id, null);
@@ -48,7 +48,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if (request.action === "cancelRecording") {
     	resetParams();
     	recording = false; 
-		sendResponse({recording: recording, recordedSteps: recordedSteps});
+		sendResponse({recording: recording, recordedSteps: recordedSteps, userID: userID, userEmail: userEmail});
 	}
 
 	if (request.action === "userLoggedIn") {
