@@ -2,9 +2,8 @@
 var recording = false;
 var recordedSteps = [];
 var recordingID = null;
-
-// Add a userID that's already in the database until oAuth is implemented 
 var userID = null;
+var userEmail = null;
 
 chrome.runtime.onInstalled.addListener(function (details) {
   	console.log('previousVersion', details.previousVersion);
@@ -12,7 +11,8 @@ chrome.runtime.onInstalled.addListener(function (details) {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if (request.action === "popupInfoRequest") {
-		sendResponse({recording: recording, recordedSteps: recordedSteps, userID: userID});
+		console.log(userID);
+		sendResponse({recording: recording, recordedSteps: recordedSteps, userID: userID, userEmail: userEmail});
 	}
 
 	if (request.action === "recordTestStepPopup" && recording) {
@@ -49,6 +49,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     	resetParams();
     	recording = false; 
 		sendResponse({recording: recording, recordedSteps: recordedSteps});
+	}
+
+	if (request.action === "userLoggedIn") {
+		userID = request.value._id;
+		userEmail = request.value.email;
 	}
 
 });

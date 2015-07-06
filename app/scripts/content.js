@@ -66,6 +66,48 @@ function cssPath(el) {
   return path;
 }
 
+/**
+ * Get full CSS path of any element. From stevenmiller888
+ *
+ * @param {Node} el
+ * @return {String}
+ */
+
+// function cssPath(el){
+//   var parentSelectors = [];
+//   var cssPathStr = '';
+//   var tagSelector;
+//   var cssClass;
+//   var tagName;
+//   var cssId;
+
+//   while (el) {
+//     tagName = el.tagName.toLowerCase();
+//     cssId = (el.id) ? ('#' + el.id) : false;
+//     cssClass = (el.className) ? ('.' + el.className.trim().replace(/\s+/g, ".")) : false;
+
+//     tagSelector = tagName;
+//     if (cssId) {
+//       tagSelector += cssId;
+//     } if (cssClass) {
+//       tagSelector += cssClass;
+//     }
+
+//     parentSelectors.unshift(tagSelector);
+//     if (typeof window === 'undefined' && !el.parentNode) {
+//       el = false;
+//     } else {
+//       el = el.parentNode !== document ? el.parentNode : false;
+//     }
+//   }
+
+//   for (var i = 0; i < parentSelectors.length; i++) {
+//     cssPathStr += ' ' + parentSelectors[i];
+//   }
+
+//   return cssPathStr.replace(/^[ \t]+|[ \t]+$/, '').split(' ');
+// };
+
 window.onclick = function(event) { 
     handler(3,'Click', event.target);
 };

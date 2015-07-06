@@ -10,24 +10,36 @@
     <!-- endbuild -->
     <!-- build:css styles/main.css -->
     <link href="styles/main.css" rel="stylesheet">
+    <link href="styles/angular-csp.css" rel="stylesheet">
     <!-- endbuild -->
     
   </head>
   <body>
     <div ng-controller="PanelController" style="width: 350px">
-        <div class="steps" style='margin-bottom: 15px; max-height: 250px; overflow: auto;'>
-            <h6>Steps Recorded:</h6>
-            <div class="panel panel-default" ng-repeat="step in recordedSteps track by $index" style='box-shadow: none; margin: 3px;'>
-                <div class="panel-body" style='padding: 3px;'>
-                    #{{$index + 1}} - {{step}}
+        <form ng-hide="loggedIn" ng-submit="login()">
+            <div ng-show="loginFailed" style="color: red">Could not authenticate. Try again.</div>
+            <h4>Log In</h4> 
+
+            <input type="text" class="username" name="email" placeholder="Email" ng-model='userEmail'>
+            <input type="password" class="password" name="password" placeholder="Password" ng-model='password'>
+            <button class="btn btn-sm" type="submit">Log In</button>
+        </form>
+        <div ng-show="loggedIn">
+            <span>Welcome {{userEmail}}</span>
+            <div class="steps" style='margin-bottom: 15px; max-height: 250px; overflow: auto;'>
+                <h6>Steps Recorded:</h6>
+                <div class="panel panel-default" ng-repeat="step in recordedSteps track by $index" style='box-shadow: none; margin: 3px; border-radius: 0px;'>
+                    <div class="panel-body" style='padding: 3px;'>
+                        #{{$index + 1}} - {{step}}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="toolbar">
-            <button type="button" class="btn btn-sm btn-danger" ng-click="recordUISteps()">{{recordButtonText}}</button>
-            <button type="button" class="btn btn-sm btn-default" ng-disabled="!recording" ng-click="takeSnapshot()">Take Snapshot</button>
-            <button type="button" class="btn btn-sm btn-primary" ng-disabled="!recording" ng-click="saveSteps()">Save Steps</button>
+            <div class="toolbar">
+                <button type="button" class="btn btn-sm btn-danger" ng-click="recordUISteps()">{{recordButtonText}}</button>
+                <button type="button" class="btn btn-sm btn-default" ng-disabled="!recording" ng-click="takeSnapshot()">Take Snapshot</button>
+                <button type="button" class="btn btn-sm btn-primary" ng-disabled="!recording" ng-click="saveSteps()">Save Steps</button>
+            </div>
         </div>
     </div>
 

@@ -7,6 +7,11 @@ app.factory('HttpFactory', function ($http) {
             return $http.post('http://localhost:1337/api/test-case/extension', testCaseData).then(function (response) {
                 return response.data;
             });
+        },
+        loginUser: function (userEmail, password) {
+            return $http.post('http://localhost:1337/login', {email: userEmail, password: password}).then(function (response) {
+            	return response.data;
+            });
         }
     };
 
@@ -17,6 +22,10 @@ app.controller('PanelController', function ($scope, HttpFactory) {
 	$scope.recording;
 	$scope.recordedSteps = [];
 	$scope.recordButtonText;
+	$scope.loggedIn = false;
+	$scope.userEmail;
+	$scope.password;
+	$scope.loginFailed = false;
 
 	chrome.runtime.sendMessage({action: "popupInfoRequest"}, updatePopup);
 
@@ -27,6 +36,16 @@ app.controller('PanelController', function ($scope, HttpFactory) {
 
 	  	$scope.$digest();
 	});
+
+	$scope.login = function() {
+		HttpFactory.loginUser($scope.userEmail, $scope.password).then(function(data) {
+			$scope.loggedIn = true;
+			chrome.runtime.sendMessage({action:'userLoggedIn', value: data.user});
+			$scope.loginFailed = false;
+		}).catch(function (response) {
+			$scope.loginFailed = true;
+        });
+	};
 
 	$scope.recordUISteps = function() {
 		if ($scope.recording) {
@@ -45,14 +64,22 @@ app.controller('PanelController', function ($scope, HttpFactory) {
 
 	$scope.saveSteps = function() {
 		chrome.runtime.sendMessage({action: "popupInfoRequest"}, function(currentData) {
-			HttpFactory.sendSteps({steps: currentData.recordedSteps, userID: currentData.userID}).then( function(newTestCase) {
+			HttpFactory.sendSteps({steps: currentData.recordedSteps, userID: currentData.userID}).then(function(newTestCase) {
 				chrome.runtime.sendMessage({action: "cancelRecording"}, updatePopup);
+				successNotification();
 				finishForm(newTestCase);
-				// display success in popup
 			}, function (err) {
-				// display error in popup
 				console.log(err);
 			});
+		});
+	};
+
+	function successNotification() {
+		if (!window.Notification)
+			return; 
+		new Notification('Test Case Submitted', {
+		  	icon: '../images/icon-38.png',
+		  	body: 'Your test case has been sucessfully submitted!'
 		});
 	};
 
@@ -61,6 +88,13 @@ app.controller('PanelController', function ($scope, HttpFactory) {
 	};
 
 	function updatePopup(currentData) {
+		if(currentData.userID === null) {
+			$scope.loggedIn = false;
+		} else {
+			$scope.loggedIn = true;
+			$scope.userEmail = currentData.userEmail;
+		}
+
 		$scope.recording = currentData.recording;
 		$scope.recordedSteps = [];
 		currentData.recordedSteps.forEach(function(step) {
