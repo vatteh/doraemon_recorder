@@ -1,10 +1,10 @@
 {
   "appName": {
-    "message": "doraemon_recorder",
+    "message": "Private Pixels Step Recorder",
     "description": "The name of the application"
   },
   "appDescription": {
-    "message": "A chrome extension to record your actions into a nightmare script",
+    "message": "A chrome extension to record user actions for visual automated testing",
     "description": "The description of the application"
   }
 }

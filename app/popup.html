@@ -17,7 +17,7 @@
   <body>
     <div ng-controller="PanelController" style="width: 350px">
         <div class="page-header lessMargin">
-            <h4>Doraemon Recorder <small ng-show="loggedIn"> {{userEmail}}</small><small ng-hide="loggedIn"> Enter credentials to get started</small></h4>
+            <h4>Private Pixels Steps Recorder <small ng-show="loggedIn"> {{userEmail}}</small><small ng-hide="loggedIn"> Enter credentials to get started</small></h4>
         </div>
         <form ng-hide="loggedIn" ng-submit="login()">
             <span ng-show="loginFailed" style="color: red">Could not authenticate. Try again.</span>
